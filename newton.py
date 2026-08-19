@@ -6,26 +6,51 @@ def some_function(x):
 
 print(some_function(3))
 
-def numerical_derivative(a, epsilon_derivative, function):
-    new_value = a + epsilon_derivative
-    y_prime = (function(new_value) - function(a))/epsilon_derivative 
+def first_numerical_derivative(a, epsilon_derivative, function):
+    new_value_a = a + epsilon_derivative
+    y_prime = (function(new_value_a) - function(a))/epsilon_derivative 
     return y_prime
 
-numerical_derivative(a = 2, epsilon_derivative = 0.0001, function = some_function)
+print(first_numerical_derivative(a = 2, epsilon_derivative = 0.0001, function = some_function))
 
-# def numerical_second_deriative(y_prime_prior):
-#    numerical_derivative(a = y_prime_prior, epsilon_derivative = epsilon, function = some_function)
+def second_numerical_derivative(b, epsilon_derivative, function):
+    new_value_b = b + epsilon_derivative
+    f_prime_with_epsilon = first_numerical_derivative(a = new_value_b,
+                                                      epsilon_derivative = epsilon_derivative,
+                                                      function = function)
+    f_prime_no_epsilon = first_numerical_derivative(a = b,
+                                                    epsilon_derivative = epsilon_derivative,
+                                                    function = function)
+    y_double_prime = (f_prime_with_epsilon - f_prime_no_epsilon)/epsilon_derivative
+    return y_double_prime
+
+print(second_numerical_derivative(b = 2, epsilon_derivative = 0.0001, function = some_function))
 
 def taylor_step(starting_value, epsilon_taylor, function_taylor):
-    y_prime_taylor = numerical_derivative(a = starting_value, 
+    y_prime_taylor = first_numerical_derivative(a = starting_value, 
                                           epsilon_derivative = epsilon_taylor, 
                                           function = function_taylor)
-    y_double_prime_taylor = numerical_derivative(a = y_prime_taylor, 
-                                                 epsilon_derivative = epsilon_taylor, 
-                                                 function = function_taylor)
-    taylor_output = starting_value - y_prime_taylor/y_double_prime_taylor
-    return taylor_output
+    y_double_prime_taylor = second_numerical_derivative(b = starting_value, 
+                                                        epsilon_derivative = epsilon_taylor,
+                                                        function = function_taylor)
+    taylor_output_x = starting_value - y_prime_taylor/y_double_prime_taylor
+    return taylor_output_x
 
-hihihi = taylor_step(starting_value = 2, epsilon_taylor = 0.0001, function_taylor = some_function)
+output_first_step = taylor_step(starting_value = 2, epsilon_taylor = 0.0001, function_taylor = some_function)
 
-print(hihihi)
+print("the output of one step is", output_first_step)
+
+def newton_looper(starting_value_newton, acceptable_error, epsilon_newton, function_newton):
+    s = taylor_step(starting_value_newton, epsilon_newton, function_newton)
+    if abs(s - starting_value_newton) <= acceptable_error:
+        return s
+    else:
+        t = taylor_step(s, epsilon_newton, function_newton)
+        while abs(t - s) > acceptable_error:
+            s = t
+            t = taylor_step(s, epsilon_newton, function_newton)
+        return s
+
+answer = newton_looper(2, 0.0001, 0.0001, some_function)
+            
+print("the minium value of the function is", answer)
