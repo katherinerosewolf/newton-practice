@@ -7,7 +7,6 @@ def some_function(x):
 
 def optimize(starting_number, epsilon, allowed_error, function_to_optimize):
     """use newton numerical methods to find the minimum of a function"""
-    
     def first_numerical_derivative(a, epsilon_derivative, function):
         new_value_a = a + epsilon_derivative
         y_prime = (function(new_value_a) - function(a))/epsilon_derivative 
@@ -60,4 +59,3 @@ def optimize(starting_number, epsilon, allowed_error, function_to_optimize):
     return answer
 
 optimize(2, 0.0001, 0.0001, some_function)
-    
