@@ -28,3 +28,7 @@ optimize(0, some_function)
 
 help(scipy.differentiate)
 help(numpy.linalg.solve)
+
+# numpy.linalg.solve(H, g)
+
+# adding a line for github practice
